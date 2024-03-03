@@ -132,3 +132,14 @@ for i, restored_signal in enumerate(restored_signals):
     plt.grid(True)
     plt.savefig(f'./figures/restored_signal_{2**(i+1)}.png', dpi=600)
     plt.show()
+
+# Построение графиков дискретизированных сигналов
+for i, discrete_signal in enumerate(discrete_signals):
+    fig, ax = plt.subplots(figsize=(width_cm / 2.54, height_cm / 2.54))
+    ax.plot(t[:len(discrete_signal)], discrete_signal, linewidth=1)
+    ax.set_xlabel('Час (с)', fontsize=14)
+    ax.set_ylabel('Амплітуда', fontsize=14)
+    plt.title(f'Дискретизований сигнал (Dt = {2**(i+1)})', fontsize=14)
+    plt.grid(True)
+    plt.savefig(f'./figures/discrete_signal_{2**(i+1)}.png', dpi=600)
+    plt.show()
