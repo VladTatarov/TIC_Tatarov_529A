@@ -13,8 +13,12 @@ F_filter = 32
 discrete_signals = []
 discrete_spectrums = []
 restored_signals = []
-variances = []
-snr_ratios = []
+discrete_variances = []
+discrete_snr_ratios = []
+quantization_variances = []
+quantization_snr_ratios = []
+quantized_signals = []
+bits_sequences = []
 
 # Розміри фігури та графіка
 width_cm = 21
@@ -86,13 +90,13 @@ for Dt in [2, 4, 8, 16]:
     # Розрахунок дисперсії та відношення сигнал-шум
     var_signal = np.var(x)
     var_diff = np.var(E1)
-    variances.append(var_diff)
+    discrete_variances.append(var_diff)
     snr_ratio = var_signal / var_diff
-    snr_ratios.append(snr_ratio)
+    discrete_snr_ratios.append(snr_ratio)
 
 # Побудова графіків
 plt.figure(figsize=(10, 6))
-plt.plot([2, 4, 8, 16], variances, marker='o')
+plt.plot([2, 4, 8, 16], discrete_variances, marker='o')
 plt.xlabel('Крок дискретизації (Dt)', fontsize=14)
 plt.ylabel('Дисперсія різниці', fontsize=14)
 plt.title('Залежність дисперсії різниці відновленого сигналу від кроку дискретизації', fontsize=14)
@@ -101,7 +105,7 @@ plt.savefig('./figures/dispersion_vs_dt.png', dpi=600)
 plt.show()
 
 plt.figure(figsize=(10, 6))
-plt.plot([2, 4, 8, 16], snr_ratios, marker='o')
+plt.plot([2, 4, 8, 16], discrete_snr_ratios, marker='o')
 plt.xlabel('Крок дискретизації (Dt)', fontsize=14)
 plt.ylabel('Співвідношення сигнал-шум', fontsize=14)
 plt.title('Залежність співвідношення сигнал-шум від кроку дискретизації', fontsize=14)
@@ -115,11 +119,10 @@ for i, spectrum in enumerate(discrete_spectrums):
     ax.plot(freqs, np.abs(spectrum), linewidth=1)
     ax.set_xlabel('Частота (Гц)', fontsize=14)
     ax.set_ylabel('Амплітуда', fontsize=14)
-    plt.title(f'Спектр дискретизованого сигналу (Dt = {2**(i+1)})', fontsize=14)
+    plt.title(f'Спектр дискретизованого сигналу (Dt = {2 ** (i + 1)})', fontsize=14)
     plt.grid(True)
-    plt.savefig(f'./figures/discrete_spectrum_{2**(i+1)}.png', dpi=600)
+    plt.savefig(f'./figures/discrete_spectrum_{2 ** (i + 1)}.png', dpi=600)
     plt.show()
-
 
 # Побудова графіків відновлених сигналів
 for i, restored_signal in enumerate(restored_signals):
@@ -127,9 +130,9 @@ for i, restored_signal in enumerate(restored_signals):
     ax.plot(t[:len(restored_signal)], restored_signal, linewidth=1)
     ax.set_xlabel('Час (с)', fontsize=14)
     ax.set_ylabel('Амплітуда', fontsize=14)
-    plt.title(f'Відновлений сигнал (Dt = {2**(i+1)})', fontsize=14)
+    plt.title(f'Відновлений сигнал (Dt = {2 ** (i + 1)})', fontsize=14)
     plt.grid(True)
-    plt.savefig(f'./figures/restored_signal_{2**(i+1)}.png', dpi=600)
+    plt.savefig(f'./figures/restored_signal_{2 ** (i + 1)}.png', dpi=600)
     plt.show()
 
 # Побудова графіків дискретизованих сигналів
@@ -138,7 +141,104 @@ for i, discrete_signal in enumerate(discrete_signals):
     ax.plot(np.arange(len(discrete_signal)) / Fs * (2 ** (i + 1)), discrete_signal, linewidth=1)
     ax.set_xlabel('Час (с)', fontsize=14)
     ax.set_ylabel('Амплітуда', fontsize=14)
-    plt.title(f'Дискретизований сигнал (Dt = {2**(i+1)})', fontsize=14)
+    plt.title(f'Дискретизований сигнал (Dt = {2 ** (i + 1)})', fontsize=14)
     plt.grid(True)
-    plt.savefig(f'./figures/discrete_signal_{2**(i+1)}.png', dpi=600)
+    plt.savefig(f'./figures/discrete_signal_{2 ** (i + 1)}.png', dpi=600)
     plt.show()
+
+# Квантування сигналу на M рівнях
+for M in [4, 16, 64, 256]:
+    # Генерація сигналу
+    t = np.arange(n) / Fs
+    x = np.sin(2 * np.pi * F_max * t)
+
+    # Обчислення кроку квантування
+    delta = (np.max(x) - np.min(x)) / (M - 1)
+
+    # Квантування сигналу
+    quantized_signal = delta * np.round(x / delta)
+    quantized_signals.append(quantized_signal)
+
+    # Розрахунок дисперсії та співвідношення сигнал-шум
+    var_signal = np.var(x)
+    var_diff = np.var(quantized_signal - x[:len(quantized_signal)])
+    snr_ratio = var_signal / var_diff
+
+    # Збереження значень дисперсії та співвідношення сигнал-шум
+    quantization_variances.append(var_diff)
+    quantization_snr_ratios.append(snr_ratio)
+
+    # Побудова бітової послідовності
+    bits = []
+    quantize_levels = np.arange(np.min(quantized_signal), np.max(quantized_signal) + 1, delta)
+    quantize_bit = np.arange(0, M)
+    for signal_value in quantized_signal:
+        for index, value in enumerate(quantize_levels[:M]):
+            if np.round(np.abs(signal_value - value), 0) == 0:
+                bits.append(quantize_bit[index])
+                break
+    bits = [int(item) for item in list(''.join([format(bits, '0' + str(int(np.log2(M))) + 'b') for bits in bits]))]
+    bits_sequences.append(bits)
+
+# Побудова таблиць квантування та рисунка з різними рівнями квантування
+for i in range(len(quantized_signals)):
+    plt.figure(figsize=(8, 6))
+    plt.plot(t, quantized_signals[i], label=f'M = {len(quantized_signals[i])}', linewidth=1)
+    plt.xlabel('Час (с)', fontsize=14)
+    plt.ylabel('Амплітуда', fontsize=14)
+    plt.title('Квантований сигнал', fontsize=14)
+    plt.legend()
+    plt.grid(True)
+    plt.savefig(f'./figures/quantized_signal_M_{len(quantized_signals[i])}.png', dpi=600)
+    plt.show()
+
+    print(f"Таблиця квантування для M = {len(quantized_signals[i])}:")
+    print("----------------------------------------------------")
+    print("|  Значення сигналу  |  Квантоване значення  |")
+    print("----------------------------------------------------")
+    for j in range(len(quantized_signals[i])):
+        print(f"|        {x[j]:.3f}         |           {quantized_signals[i][j]:.3f}          |")
+    print("----------------------------------------------------")
+
+# Побудова графіка бітової послідовності
+plt.figure(figsize=(10, 6))
+plt.step(np.arange(0, len(bits)), bits, linewidth=0.1)
+plt.xlabel('Час (відліки)', fontsize=14)
+plt.ylabel('Біти', fontsize=14)
+plt.title(f'Бітова послідовність при квантуванні на {M} рівнях', fontsize=14)
+plt.grid(True)
+plt.savefig(f'./figures/bit_sequence_{M}_levels.png', dpi=600)
+plt.show()
+
+# Розрахунок дисперсії та співвідношення сигнал-шум
+var_signal = np.var(x)
+var_diff = np.var(quantized_signal - x[:len(quantized_signal)])
+snr_ratio = var_signal / var_diff
+
+# Побудова графіка залежності дисперсії від кількості рівнів квантування
+quantization_variances.append(var_diff)
+quantization_snr_ratios.append(snr_ratio)
+
+# Видалення останнього елемента з кожного списку
+quantization_variances.pop()
+quantization_snr_ratios.pop()
+
+# Побудова рисунка залежності дисперсії від кількості рівнів квантування
+plt.figure(figsize=(10, 6))
+plt.plot([4, 16, 64, 256], quantization_variances, marker='o')
+plt.xlabel('Кількість рівнів квантування (M)', fontsize=14)
+plt.ylabel('Дисперсія різниці', fontsize=14)
+plt.title('Залежність дисперсії різниці від кількості рівнів квантування', fontsize=14)
+plt.grid(True)
+plt.savefig('./figures/dispersion_vs_quantization_levels.png', dpi=600)
+plt.show()
+
+# Побудова рисунка залежності співвідношення сигнал-шум від кількості рівнів квантування
+plt.figure(figsize=(10, 6))
+plt.plot([4, 16, 64, 256], quantization_snr_ratios, marker='o')
+plt.xlabel('Кількість рівнів квантування (M)', fontsize=14)
+plt.ylabel('Співвідношення сигнал-шум', fontsize=14)
+plt.title('Залежність співвідношення сигнал-шум від кількості рівнів квантування', fontsize=14)
+plt.grid(True)
+plt.savefig('./figures/snr_vs_quantization_levels.png', dpi=600)
+plt.show()
