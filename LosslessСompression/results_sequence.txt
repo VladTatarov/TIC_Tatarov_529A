@@ -1,0 +1,89 @@
+Test Sequence 1:
+Original Sequence: 0010110000011000000000000001000100000000110000000100000000000000000001000010000000000000000000000000
+Sequence Alphabet Size: 2
+Original Sequence Size: 100 [bits]
+
+Test Sequence 2:
+Original Sequence: Татаров000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+Sequence Alphabet Size: 7
+Original Sequence Size: 100 [bits]
+
+Test Sequence 3:
+Original Sequence: 00000а0000в00р000000000т0000Т0000000а00000000о000000000000000000000000000000000000000000000000000000
+Sequence Alphabet Size: 7
+Original Sequence Size: 100 [bits]
+
+Test Sequence 4:
+Original Sequence: в-а2ар-тв-оТооАво5аТоАа9тта-вТта2А9аТ-вра2Ат5ра9а25-в9т2а-А5в25Ао5а9арАТА92рааТТТ9рраТтво59ао-р2та5т
+Sequence Alphabet Size: 11
+Original Sequence Size: 100 [bits]
+
+Test Sequence 5:
+Original Sequence: 0-0900002Т000000Т000990000050000009Т0-0000000500000а000500000500Т00А00000050-00000--000Т00000090Т000
+Sequence Alphabet Size: 7
+Original Sequence Size: 100 [bits]
+
+Test Sequence 6:
+Original Sequence: 965Т8А72аААА5Т-98ТА2а927-7Т592а26А12ТА9-Т-652А2-09ТАА2Т5А5107А99а921А2а-АТТАТ99-4549а2Та97-8аТ7Т1ТАа
+Sequence Alphabet Size: 7
+Original Sequence Size: 100 [bits]
+
+Test Sequence 7:
+Original Sequence: wppwbhxzub4rip02b8n9vqllzhhair4oks1m880cv6uwcti4flx81x5x91ksrjett6ngo9e3rci04hga3wh9ya9zc95v91dezmvy
+Sequence Alphabet Size: 36
+Original Sequence Size: 100 [bits]
+
+Test Sequence 8:
+Original Sequence: 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+Sequence Alphabet Size: 1
+Original Sequence Size: 100 [bits]
+
+Characteristics of Generated Sequences:
+Sequence 1:
+Sequence Alphabet Size: 2
+Entropy: 0.53
+Source Excess: 0.47
+Probability Uniformity: нерівна
+
+Sequence 2:
+Sequence Alphabet Size: 7
+Entropy: 0.54
+Source Excess: 0.81
+Probability Uniformity: нерівна
+
+Sequence 3:
+Sequence Alphabet Size: 7
+Entropy: 0.54
+Source Excess: 0.81
+Probability Uniformity: нерівна
+
+Sequence 4:
+Sequence Alphabet Size: 11
+Entropy: 3.4
+Source Excess: 0.02
+Probability Uniformity: нерівна
+
+Sequence 5:
+Sequence Alphabet Size: 8
+Entropy: 1.39
+Source Excess: 0.54
+Probability Uniformity: нерівна
+
+Sequence 6:
+Sequence Alphabet Size: 13
+Entropy: 3.41
+Source Excess: 0.08
+Probability Uniformity: нерівна
+
+Sequence 7:
+Sequence Alphabet Size: 35
+Entropy: 4.98
+Source Excess: 0.03
+Probability Uniformity: нерівна
+
+Sequence 8:
+Sequence Alphabet Size: 1
+Entropy: -0.0
+Source Excess: 1
+Probability Uniformity: рівна
+
