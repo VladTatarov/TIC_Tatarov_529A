@@ -121,7 +121,11 @@ letters_5 = list(surname[:2]) + list(group_number)
 probability = 0.2
 
 # Згенерувати послідовність розмірності N_sequence
-sequence_5 = [random.choice(letters_5) if random.random() < probability else '0' for _ in range(N_sequence)]
+sequence_5 = random.choices(letters_5, weights=[probability] * len(letters_5), k=N_sequence)
+
+# Обчислення ймовірностей кожного символу у послідовності
+counts_5 = collections.Counter(sequence_5)
+probability_5 = {symbol: count / N_sequence for symbol, count in counts_5.items()}
 
 # Перемішати послідовність
 random.shuffle(sequence_5)
@@ -134,7 +138,11 @@ with open("D:/PycharmProjects/TIC/LosslessСompression/results_sequence.txt", "a
     file.write("Test Sequence 5:\n")
     file.write(f"Original Sequence: {original_sequence_5}\n")
     file.write(f"Sequence Alphabet Size: {len(set(letters_5))}\n")
-    file.write(f"Original Sequence Size: {len(original_sequence_5)} [bits]\n\n")
+    file.write(f"Original Sequence Size: {len(original_sequence_5)} [bits]\n")
+    file.write("Symbol Probabilities:\n")
+    for symbol, prob in probability_5.items():
+        file.write(f"{symbol}: {prob}\n")
+    file.write("\n")
 
 # Тестова послідовність №6
 # Список букв та цифр
