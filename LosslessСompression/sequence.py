@@ -5,7 +5,6 @@ import string
 import matplotlib.pyplot as plt
 
 open("results_sequence.txt", "w")
-open("sequence.txt", "w")
 
 # Загальні змінні
 student_number = 12
@@ -18,16 +17,19 @@ sequences = []
 # Перша послідовність
 sequence_1 = ['1'] * student_number + ['0'] * (N_sequence - student_number)
 random.shuffle(sequence_1)
+sequence_1 = ''.join(sequence_1)
 sequences.append(sequence_1)
 
 # Друга послідовність
-surname = "Татаров"
+surname = "Tatarov"
 sequence_2 = list(surname) + ['0'] * (N_sequence - len(surname))
+sequence_2 = ''.join(sequence_2)
 sequences.append(sequence_2)
 
 # Третя послідовність
 sequence_3 = list(surname) + ['0'] * (N_sequence - len(surname))
 random.shuffle(sequence_3)
+sequence_3 = ''.join(sequence_3)
 sequences.append(sequence_3)
 
 # Четверта послідовність
@@ -37,6 +39,7 @@ n_repeats = N_sequence // n_letters
 remainder = N_sequence % n_letters
 sequence_4 = letters * n_repeats + letters[:remainder]
 random.shuffle(sequence_4)
+sequence_4 = ''.join(sequence_4)
 sequences.append(sequence_4)
 
 # П'ята послідовність
@@ -44,6 +47,7 @@ letters_5 = list(surname[:2]) + list(group_number)
 probability = 0.2
 sequence_5 = letters_5 * 20
 random.shuffle(sequence_5)
+sequence_5 = ''.join(sequence_5)
 sequences.append(sequence_5)
 
 # Шоста послідовність
@@ -55,16 +59,26 @@ n_letters_6 = int(total_probability_letters * N_sequence)
 n_digits_6 = int(total_probability_digits * N_sequence)
 sequence_6 = random.choices(letters_6, k=n_letters_6) + random.choices(digits_6, k=n_digits_6)
 random.shuffle(sequence_6)
+sequence_6 = ''.join(sequence_6)
 sequences.append(sequence_6)
 
 # Сьома послідовність
 elements_7 = string.ascii_lowercase + string.digits
 sequence_7 = [random.choice(elements_7) for _ in range(N_sequence)]
+sequence_7 = ''.join(sequence_7)
 sequences.append(sequence_7)
 
 # Восьма послідовність
-original_sequence_8 = '1' * N_sequence
-sequences.append(list(original_sequence_8))
+sequence_8 = '1' * N_sequence
+sequence_8 = ''.join(sequence_8)
+sequences.append(sequence_8)
+
+original_sequences = [sequence_1, sequence_2, sequence_3,
+                      sequence_4, sequence_5, sequence_6,
+                      sequence_7, sequence_8]
+
+with open("sequence.txt", "w", encoding="utf-8") as file:
+    print(original_sequences, file=file)
 
 # Обчислення характеристик
 results = []
