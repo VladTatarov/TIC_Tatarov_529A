@@ -313,7 +313,6 @@ def read_image_file(filepath):
             category = reader.read_huffman_code(dc_table)
             dc[block_index, component] = reader.read_int(category)
             cells_count = 0
-            # TODO: спроба зробити читання AC коефіцієнтів краще
             while cells_count < 63:
                 run_length, size = reader.read_huffman_code(ac_table)
                 if (run_length, size) == (0, 0):
