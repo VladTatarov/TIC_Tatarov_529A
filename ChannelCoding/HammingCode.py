@@ -56,9 +56,11 @@ class HammingCode:
         return result
 
     def _safe_decode_chunk(self, chunk):
-        for j in range(self.check_bits_count, len(chunk), 8):
+        data_bits = [chunk[j] for j in range(self.check_bits_count, len(chunk)) if
+                     j % (self.chunk_length + 1) >= self.check_bits_count]
+        for j in range(0, len(data_bits), 8):
             try:
-                yield chr(int(chunk[j:j + 8], 2))
+                yield chr(int(''.join(data_bits[j:j + 8]), 2))
             except ValueError:
                 yield '�'
 
