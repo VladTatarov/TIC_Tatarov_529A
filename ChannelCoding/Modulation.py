@@ -221,9 +221,9 @@ def main(ask, psk, fsk1, fsk2):
 
 
 if __name__ == "__main__":
-    ask = 40
-    psk = 40
-    fsk1 = 60
-    fsk2 = 30
+    ask = 25
+    psk = 25
+    fsk1 = 30
+    fsk2 = 15
 
     main(ask, psk, fsk1, fsk2)
